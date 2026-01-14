@@ -2,6 +2,126 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import './App.css'
 
+// ============================================
+// Password Gate Component
+// ============================================
+function PasswordGate({ onUnlock }) {
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState(false)
+  const [shake, setShake] = useState(false)
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (password === 'panxile') {
+      onUnlock()
+    } else {
+      setError(true)
+      setShake(true)
+      setTimeout(() => {
+        setShake(false)
+        setError(false)
+      }, 600)
+    }
+  }
+
+  return (
+    <div className="password-gate">
+      <div className="gate-particles">
+        {[...Array(40)].map((_, i) => (
+          <div key={i} className="gate-particle" style={{
+            '--delay': `${Math.random() * 5}s`,
+            '--duration': `${15 + Math.random() * 10}s`,
+            '--x-start': `${Math.random() * 100}%`,
+            '--x-end': `${Math.random() * 100}%`,
+            '--size': `${2 + Math.random() * 4}px`
+          }} />
+        ))}
+      </div>
+      <div className="gate-grid">
+        <div className="grid-lines"></div>
+      </div>
+      <motion.div
+        className="gate-container"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+      >
+        <motion.div
+          className="gate-logo"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.3, type: 'spring', damping: 10 }}
+        >
+          <span className="logo-icon">🔐</span>
+        </motion.div>
+        <motion.h1
+          className="gate-title"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <span className="gate-bracket">[</span>
+          年度履职综述
+          <span className="gate-bracket">]</span>
+        </motion.h1>
+        <motion.p
+          className="gate-subtitle"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+        >
+          ANNUAL PERFORMANCE SUMMARY
+        </motion.p>
+        <motion.form
+          className={`gate-form ${shake ? 'shake' : ''}`}
+          onSubmit={handleSubmit}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9 }}
+        >
+          <div className={`gate-input-wrapper ${error ? 'error' : ''}`}>
+            <input
+              type="password"
+              className="gate-input"
+              placeholder="请输入访问密码"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoFocus
+            />
+            <div className="input-glow"></div>
+          </div>
+          <motion.button
+            type="submit"
+            className="gate-button"
+            whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(79, 209, 197, 0.5)' }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span className="button-text">进入</span>
+            <span className="button-icon">→</span>
+          </motion.button>
+        </motion.form>
+        {error && (
+          <motion.p
+            className="gate-error"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            密码错误，请重试
+          </motion.p>
+        )}
+        <motion.div
+          className="gate-footer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.1 }}
+        >
+          <span className="footer-text">© 2026 潘喜乐</span>
+        </motion.div>
+      </motion.div>
+    </div>
+  )
+}
+
 // Slide transition variants - 3 different effects
 const transitionTypes = {
   // Type 1: Original slide with 3D rotate
@@ -1594,6 +1714,7 @@ function ThankYouSlide() {
 // Main App Component
 // ============================================
 function App() {
+  const [isUnlocked, setIsUnlocked] = useState(false)
   const [[currentSlide, direction], setSlide] = useState([0, 0])
   const slides = [
     CoverSlide,           // 1. 封面
@@ -1632,6 +1753,8 @@ function App() {
   }, [currentSlide])
 
   useEffect(() => {
+    if (!isUnlocked) return
+
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
         e.preventDefault()
@@ -1644,7 +1767,12 @@ function App() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [nextSlide, prevSlide])
+  }, [nextSlide, prevSlide, isUnlocked])
+
+  // Show password gate if not unlocked
+  if (!isUnlocked) {
+    return <PasswordGate onUnlock={() => setIsUnlocked(true)} />
+  }
 
   const SlideComponent = slides[currentSlide]
 
