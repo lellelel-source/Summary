@@ -3,9 +3,107 @@ import { motion, AnimatePresence } from 'framer-motion'
 import './App.css'
 
 // ============================================
+// Homepage Component
+// ============================================
+function Homepage({ onEnter }) {
+  return (
+    <div className="homepage">
+      <div className="homepage-particles">
+        {[...Array(50)].map((_, i) => (
+          <div key={i} className="homepage-particle" style={{
+            '--delay': `${Math.random() * 5}s`,
+            '--duration': `${15 + Math.random() * 10}s`,
+            '--x-start': `${Math.random() * 100}%`,
+            '--x-end': `${Math.random() * 100}%`,
+            '--size': `${2 + Math.random() * 4}px`
+          }} />
+        ))}
+      </div>
+      <div className="homepage-grid">
+        <div className="grid-lines"></div>
+      </div>
+      <div className="homepage-stars">
+        {[...Array(100)].map((_, i) => (
+          <div key={i} className="star" style={{
+            '--x': `${Math.random() * 100}%`,
+            '--y': `${Math.random() * 100}%`,
+            '--size': `${1 + Math.random() * 2}px`,
+            '--duration': `${2 + Math.random() * 3}s`,
+            '--delay': `${Math.random() * 3}s`
+          }} />
+        ))}
+      </div>
+      <motion.div
+        className="homepage-content"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <motion.div
+          className="homepage-welcome"
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+        >
+          <span className="welcome-text">Welcome</span>
+        </motion.div>
+
+        <motion.h1
+          className="homepage-title"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+        >
+          <span className="title-line">潘喜乐</span>
+          <span className="title-divider"></span>
+          <span className="title-sub">个人工作展示</span>
+        </motion.h1>
+
+        <motion.div
+          className="homepage-cards"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.8 }}
+        >
+          <motion.div
+            className="homepage-card main-card"
+            onClick={onEnter}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: '0 0 60px rgba(79, 209, 197, 0.4)',
+              borderColor: 'rgba(79, 209, 197, 0.8)'
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="card-glow-effect"></div>
+            <div className="card-icon">📊</div>
+            <h2 className="card-title">2025年终述职</h2>
+            <p className="card-desc">年度履职综述报告</p>
+            <div className="card-arrow">
+              <span>→</span>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          className="homepage-footer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+        >
+          <span className="footer-line"></span>
+          <span className="footer-text">© 2026 All Rights Reserved</span>
+          <span className="footer-line"></span>
+        </motion.div>
+      </motion.div>
+    </div>
+  )
+}
+
+// ============================================
 // Password Gate Component
 // ============================================
-function PasswordGate({ onUnlock }) {
+function PasswordGate({ onUnlock, onBack }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(false)
   const [shake, setShake] = useState(false)
@@ -40,6 +138,17 @@ function PasswordGate({ onUnlock }) {
       <div className="gate-grid">
         <div className="grid-lines"></div>
       </div>
+      <motion.button
+        className="back-button"
+        onClick={onBack}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <span className="back-arrow">←</span>
+        <span>返回首页</span>
+      </motion.button>
       <motion.div
         className="gate-container"
         initial={{ opacity: 0, y: 30 }}
@@ -61,7 +170,7 @@ function PasswordGate({ onUnlock }) {
           transition={{ delay: 0.5 }}
         >
           <span className="gate-bracket">[</span>
-          年度履职综述
+          2025年终述职
           <span className="gate-bracket">]</span>
         </motion.h1>
         <motion.p
@@ -70,7 +179,7 @@ function PasswordGate({ onUnlock }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
         >
-          ANNUAL PERFORMANCE SUMMARY
+          请输入访问密码以继续
         </motion.p>
         <motion.form
           className={`gate-form ${shake ? 'shake' : ''}`}
@@ -1714,7 +1823,7 @@ function ThankYouSlide() {
 // Main App Component
 // ============================================
 function App() {
-  const [isUnlocked, setIsUnlocked] = useState(false)
+  const [currentPage, setCurrentPage] = useState('home') // 'home', 'password', 'presentation'
   const [[currentSlide, direction], setSlide] = useState([0, 0])
   const slides = [
     CoverSlide,           // 1. 封面
@@ -1753,7 +1862,7 @@ function App() {
   }, [currentSlide])
 
   useEffect(() => {
-    if (!isUnlocked) return
+    if (currentPage !== 'presentation') return
 
     const handleKeyDown = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
@@ -1767,11 +1876,21 @@ function App() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [nextSlide, prevSlide, isUnlocked])
+  }, [nextSlide, prevSlide, currentPage])
 
-  // Show password gate if not unlocked
-  if (!isUnlocked) {
-    return <PasswordGate onUnlock={() => setIsUnlocked(true)} />
+  // Show homepage first
+  if (currentPage === 'home') {
+    return <Homepage onEnter={() => setCurrentPage('password')} />
+  }
+
+  // Show password gate when clicked on 2025年终述职
+  if (currentPage === 'password') {
+    return (
+      <PasswordGate
+        onUnlock={() => setCurrentPage('presentation')}
+        onBack={() => setCurrentPage('home')}
+      />
+    )
   }
 
   const SlideComponent = slides[currentSlide]
