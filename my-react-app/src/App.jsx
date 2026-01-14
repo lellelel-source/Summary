@@ -226,7 +226,7 @@ function PasswordGate({ onUnlock, onBack }) {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.1 }}
         >
-          <span className="footer-text">© 2026 潘喜乐</span>
+          <span className="footer-text">© 2026</span>
         </motion.div>
       </motion.div>
     </div>
