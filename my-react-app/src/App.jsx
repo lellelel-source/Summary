@@ -138,17 +138,19 @@ function PasswordGate({ onUnlock, onBack }) {
       <div className="gate-grid">
         <div className="grid-lines"></div>
       </div>
-      <motion.button
-        className="back-button"
-        onClick={onBack}
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <span className="back-arrow">←</span>
-        <span>返回首页</span>
-      </motion.button>
+      {onBack && (
+        <motion.button
+          className="back-button"
+          onClick={onBack}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <span className="back-arrow">←</span>
+          <span>返回首页</span>
+        </motion.button>
+      )}
       <motion.div
         className="gate-container"
         initial={{ opacity: 0, y: 30 }}
@@ -1823,16 +1825,8 @@ function ThankYouSlide() {
 // Main App Component
 // ============================================
 function App() {
-  // Check URL for password requirement
-  const getInitialPage = () => {
-    const urlParams = new URLSearchParams(window.location.search)
-    if (urlParams.get('access') === 'report') {
-      return 'password'
-    }
-    return 'home'
-  }
-
-  const [currentPage, setCurrentPage] = useState(getInitialPage) // 'home', 'password', 'presentation'
+  // Start with password gate - user must enter password first
+  const [currentPage, setCurrentPage] = useState('password') // 'password', 'home', 'presentation'
   const [[currentSlide, direction], setSlide] = useState([0, 0])
   const slides = [
     CoverSlide,           // 1. 封面
@@ -1887,23 +1881,19 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [nextSlide, prevSlide, currentPage])
 
-  // Show homepage first (when no URL param)
-  if (currentPage === 'home') {
-    return <Homepage onEnter={() => setCurrentPage('presentation')} />
-  }
-
-  // Show password gate when entering URL with ?access=report
+  // Show password gate first when entering the site
   if (currentPage === 'password') {
     return (
       <PasswordGate
-        onUnlock={() => setCurrentPage('presentation')}
-        onBack={() => {
-          // Clear URL params and go to home
-          window.history.replaceState({}, '', window.location.pathname)
-          setCurrentPage('home')
-        }}
+        onUnlock={() => setCurrentPage('home')}
+        onBack={null}
       />
     )
+  }
+
+  // After password, show homepage
+  if (currentPage === 'home') {
+    return <Homepage onEnter={() => setCurrentPage('presentation')} />
   }
 
   const SlideComponent = slides[currentSlide]
