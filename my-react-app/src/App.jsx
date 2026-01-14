@@ -110,7 +110,7 @@ function PasswordGate({ onUnlock, onBack }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (password === 'panxile') {
+    if (password === '20260101') {
       onUnlock()
     } else {
       setError(true)
@@ -1823,7 +1823,16 @@ function ThankYouSlide() {
 // Main App Component
 // ============================================
 function App() {
-  const [currentPage, setCurrentPage] = useState('home') // 'home', 'password', 'presentation'
+  // Check URL for password requirement
+  const getInitialPage = () => {
+    const urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.get('access') === 'report') {
+      return 'password'
+    }
+    return 'home'
+  }
+
+  const [currentPage, setCurrentPage] = useState(getInitialPage) // 'home', 'password', 'presentation'
   const [[currentSlide, direction], setSlide] = useState([0, 0])
   const slides = [
     CoverSlide,           // 1. 封面
@@ -1878,17 +1887,21 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [nextSlide, prevSlide, currentPage])
 
-  // Show homepage first
+  // Show homepage first (when no URL param)
   if (currentPage === 'home') {
-    return <Homepage onEnter={() => setCurrentPage('password')} />
+    return <Homepage onEnter={() => setCurrentPage('presentation')} />
   }
 
-  // Show password gate when clicked on 2025年终述职
+  // Show password gate when entering URL with ?access=report
   if (currentPage === 'password') {
     return (
       <PasswordGate
         onUnlock={() => setCurrentPage('presentation')}
-        onBack={() => setCurrentPage('home')}
+        onBack={() => {
+          // Clear URL params and go to home
+          window.history.replaceState({}, '', window.location.pathname)
+          setCurrentPage('home')
+        }}
       />
     )
   }
