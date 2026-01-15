@@ -3892,6 +3892,40 @@
   }
 }
 
+/* Year Tabs */
+.year-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.year-tab {
+  padding: 12px 35px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 2px;
+}
+
+.year-tab:hover {
+  background: rgba(79, 209, 197, 0.1);
+  border-color: rgba(79, 209, 197, 0.3);
+  color: var(--text-secondary);
+}
+
+.year-tab.active {
+  background: linear-gradient(135deg, rgba(79, 209, 197, 0.2) 0%, rgba(79, 209, 197, 0.1) 100%);
+  border-color: var(--secondary);
+  color: var(--secondary);
+  box-shadow: 0 0 20px rgba(79, 209, 197, 0.2);
+}
+
 .homepage-footer {
   display: flex;
   align-items: center;

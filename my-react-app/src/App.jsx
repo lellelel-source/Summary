@@ -254,6 +254,8 @@ function CloudDataAnalytics({ onBack }) {
 // Homepage Component
 // ============================================
 function Homepage({ onEnter, onEnterDefense, onEnterAnalytics }) {
+  const [selectedYear, setSelectedYear] = useState('2026')
+
   return (
     <div className="homepage">
       <div className="homepage-particles">
@@ -307,69 +309,109 @@ function Homepage({ onEnter, onEnterDefense, onEnterAnalytics }) {
           <span className="title-sub">个人工作展示</span>
         </motion.h1>
 
+        {/* Year Tabs */}
         <motion.div
-          className="homepage-cards"
-          initial={{ opacity: 0, y: 30 }}
+          className="year-tabs"
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
         >
-          <motion.div
-            className="homepage-card main-card"
-            onClick={onEnter}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: '0 0 60px rgba(79, 209, 197, 0.4)',
-              borderColor: 'rgba(79, 209, 197, 0.8)'
-            }}
-            whileTap={{ scale: 0.98 }}
+          <motion.button
+            className={`year-tab ${selectedYear === '2026' ? 'active' : ''}`}
+            onClick={() => setSelectedYear('2026')}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <div className="card-glow-effect"></div>
-            <div className="card-icon">📊</div>
-            <h2 className="card-title">2025年终述职</h2>
-            <p className="card-desc">年度履职综述报告</p>
-            <div className="card-arrow">
-              <span>→</span>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="homepage-card analytics-card"
-            onClick={onEnterAnalytics}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: '0 0 60px rgba(246, 173, 85, 0.4)',
-              borderColor: 'rgba(246, 173, 85, 0.8)'
-            }}
-            whileTap={{ scale: 0.98 }}
+            2026年
+          </motion.button>
+          <motion.button
+            className={`year-tab ${selectedYear === '2025' ? 'active' : ''}`}
+            onClick={() => setSelectedYear('2025')}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <div className="card-glow-effect orange"></div>
-            <div className="card-icon">📈</div>
-            <h2 className="card-title">云招商数据分析</h2>
-            <p className="card-desc">运营数据可视化</p>
-            <div className="card-arrow">
-              <span>→</span>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="homepage-card secondary-card"
-            onClick={onEnterDefense}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: '0 0 60px rgba(167, 139, 250, 0.4)',
-              borderColor: 'rgba(167, 139, 250, 0.8)'
-            }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div className="card-glow-effect purple"></div>
-            <div className="card-icon">🎯</div>
-            <h2 className="card-title">转正述职答辩</h2>
-            <p className="card-desc">September 2025</p>
-            <div className="card-arrow">
-              <span>→</span>
-            </div>
-          </motion.div>
+            2025年
+          </motion.button>
         </motion.div>
+
+        <AnimatePresence mode="wait">
+          {selectedYear === '2026' ? (
+            <motion.div
+              key="2026"
+              className="homepage-cards"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 30 }}
+              transition={{ duration: 0.3 }}
+            >
+              <motion.div
+                className="homepage-card main-card"
+                onClick={onEnter}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: '0 0 60px rgba(79, 209, 197, 0.4)',
+                  borderColor: 'rgba(79, 209, 197, 0.8)'
+                }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="card-glow-effect"></div>
+                <div className="card-icon">📊</div>
+                <h2 className="card-title">2025年度履职综述</h2>
+                <p className="card-desc">年终述职报告</p>
+                <div className="card-arrow">
+                  <span>→</span>
+                </div>
+              </motion.div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="2025"
+              className="homepage-cards"
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ duration: 0.3 }}
+            >
+              <motion.div
+                className="homepage-card analytics-card"
+                onClick={onEnterAnalytics}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: '0 0 60px rgba(246, 173, 85, 0.4)',
+                  borderColor: 'rgba(246, 173, 85, 0.8)'
+                }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="card-glow-effect orange"></div>
+                <div className="card-icon">📈</div>
+                <h2 className="card-title">云招商数据分析</h2>
+                <p className="card-desc">运营数据可视化</p>
+                <div className="card-arrow">
+                  <span>→</span>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="homepage-card secondary-card"
+                onClick={onEnterDefense}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: '0 0 60px rgba(167, 139, 250, 0.4)',
+                  borderColor: 'rgba(167, 139, 250, 0.8)'
+                }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="card-glow-effect purple"></div>
+                <div className="card-icon">🎯</div>
+                <h2 className="card-title">转正述职答辩</h2>
+                <p className="card-desc">September 2025</p>
+                <div className="card-arrow">
+                  <span>→</span>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <motion.div
           className="homepage-footer"
@@ -458,7 +500,7 @@ function PasswordGate({ onUnlock, onBack }) {
           transition={{ delay: 0.5 }}
         >
           <span className="gate-bracket">[</span>
-          2025年终述职
+          年度履职综述
           <span className="gate-bracket">]</span>
         </motion.h1>
         <motion.p
