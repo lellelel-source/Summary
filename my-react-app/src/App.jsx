@@ -2197,22 +2197,11 @@ function App() {
     return () => window.removeEventListener('wheel', handleWheel)
   }, [nextSlide, prevSlide, currentPage])
 
-  // Check if already authenticated on mount
-  useEffect(() => {
-    const isAuthenticated = localStorage.getItem('pxl_authenticated')
-    if (isAuthenticated === 'true') {
-      setCurrentPage('home')
-    }
-  }, [])
-
   // Show password gate first when entering the site
   if (currentPage === 'password') {
     return (
       <PasswordGate
-        onUnlock={() => {
-          localStorage.setItem('pxl_authenticated', 'true')
-          setCurrentPage('home')
-        }}
+        onUnlock={() => setCurrentPage('home')}
         onBack={null}
       />
     )
