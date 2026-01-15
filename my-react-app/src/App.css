@@ -3534,6 +3534,18 @@
   transform: translateX(-3px);
 }
 
+/* Presentation Back Button - higher z-index to appear above slides */
+.back-button.presentation-back {
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.6);
+  border-color: rgba(79, 209, 197, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.back-button.presentation-back:hover {
+  background: rgba(79, 209, 197, 0.2);
+}
+
 /* Homepage responsive */
 @media (max-width: 768px) {
   .homepage-title .title-line {

@@ -1967,6 +1967,19 @@ function App() {
 
   return (
     <div className="presentation">
+      {/* Back to Homepage Button */}
+      <motion.button
+        className="back-button presentation-back"
+        onClick={() => setCurrentPage('home')}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <span className="back-arrow">←</span>
+        <span>返回首页</span>
+      </motion.button>
+
       {/* Cursor Glow Effect */}
       <CursorGlow />
 
