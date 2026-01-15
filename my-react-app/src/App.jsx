@@ -254,10 +254,49 @@ function CloudDataAnalytics({ onBack }) {
 // Homepage Component
 // ============================================
 function Homepage({ onEnter, onEnterDefense, onEnterAnalytics }) {
-  const [selectedYear, setSelectedYear] = useState('2026')
+  const [selectedYear, setSelectedYear] = useState('all') // 'all', '2026', '2025'
+
+  // All cards data
+  const allCards = [
+    {
+      id: 'yearend',
+      year: '2026',
+      title: '2025年度履职综述',
+      desc: '年终述职报告',
+      icon: '📊',
+      cardClass: 'main-card',
+      glowClass: '',
+      onClick: onEnter
+    },
+    {
+      id: 'analytics',
+      year: '2025',
+      title: '云招商数据分析',
+      desc: '运营数据可视化',
+      icon: '📈',
+      cardClass: 'analytics-card',
+      glowClass: 'orange',
+      onClick: onEnterAnalytics
+    },
+    {
+      id: 'defense',
+      year: '2025',
+      title: '转正述职答辩',
+      desc: 'September 2025',
+      icon: '🎯',
+      cardClass: 'secondary-card',
+      glowClass: 'purple',
+      onClick: onEnterDefense
+    }
+  ]
+
+  // Filter cards based on selected year
+  const filteredCards = selectedYear === 'all'
+    ? allCards
+    : allCards.filter(card => card.year === selectedYear)
 
   return (
-    <div className="homepage">
+    <div className="homepage scrollable">
       <div className="homepage-particles">
         {[...Array(50)].map((_, i) => (
           <div key={i} className="homepage-particle" style={{
@@ -317,6 +356,14 @@ function Homepage({ onEnter, onEnterDefense, onEnterAnalytics }) {
           transition={{ delay: 0.6, duration: 0.5 }}
         >
           <motion.button
+            className={`year-tab ${selectedYear === 'all' ? 'active' : ''}`}
+            onClick={() => setSelectedYear('all')}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            全部
+          </motion.button>
+          <motion.button
             className={`year-tab ${selectedYear === '2026' ? 'active' : ''}`}
             onClick={() => setSelectedYear('2026')}
             whileHover={{ scale: 1.05 }}
@@ -335,82 +382,47 @@ function Homepage({ onEnter, onEnterDefense, onEnterAnalytics }) {
         </motion.div>
 
         <AnimatePresence mode="wait">
-          {selectedYear === '2026' ? (
-            <motion.div
-              key="2026"
-              className="homepage-cards"
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 30 }}
-              transition={{ duration: 0.3 }}
-            >
+          <motion.div
+            key={selectedYear}
+            className="homepage-cards"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {filteredCards.map((card, index) => (
               <motion.div
-                className="homepage-card main-card"
-                onClick={onEnter}
+                key={card.id}
+                className={`homepage-card ${card.cardClass}`}
+                onClick={card.onClick}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: '0 0 60px rgba(79, 209, 197, 0.4)',
-                  borderColor: 'rgba(79, 209, 197, 0.8)'
+                  boxShadow: card.cardClass === 'main-card'
+                    ? '0 0 60px rgba(79, 209, 197, 0.4)'
+                    : card.cardClass === 'analytics-card'
+                      ? '0 0 60px rgba(246, 173, 85, 0.4)'
+                      : '0 0 60px rgba(167, 139, 250, 0.4)',
+                  borderColor: card.cardClass === 'main-card'
+                    ? 'rgba(79, 209, 197, 0.8)'
+                    : card.cardClass === 'analytics-card'
+                      ? 'rgba(246, 173, 85, 0.8)'
+                      : 'rgba(167, 139, 250, 0.8)'
                 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="card-glow-effect"></div>
-                <div className="card-icon">📊</div>
-                <h2 className="card-title">2025年度履职综述</h2>
-                <p className="card-desc">年终述职报告</p>
+                <div className={`card-glow-effect ${card.glowClass}`}></div>
+                <div className="card-icon">{card.icon}</div>
+                <h2 className="card-title">{card.title}</h2>
+                <p className="card-desc">{card.desc}</p>
                 <div className="card-arrow">
                   <span>→</span>
                 </div>
               </motion.div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="2025"
-              className="homepage-cards"
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -30 }}
-              transition={{ duration: 0.3 }}
-            >
-              <motion.div
-                className="homepage-card analytics-card"
-                onClick={onEnterAnalytics}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: '0 0 60px rgba(246, 173, 85, 0.4)',
-                  borderColor: 'rgba(246, 173, 85, 0.8)'
-                }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="card-glow-effect orange"></div>
-                <div className="card-icon">📈</div>
-                <h2 className="card-title">云招商数据分析</h2>
-                <p className="card-desc">运营数据可视化</p>
-                <div className="card-arrow">
-                  <span>→</span>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="homepage-card secondary-card"
-                onClick={onEnterDefense}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: '0 0 60px rgba(167, 139, 250, 0.4)',
-                  borderColor: 'rgba(167, 139, 250, 0.8)'
-                }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="card-glow-effect purple"></div>
-                <div className="card-icon">🎯</div>
-                <h2 className="card-title">转正述职答辩</h2>
-                <p className="card-desc">September 2025</p>
-                <div className="card-arrow">
-                  <span>→</span>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
+            ))}
+          </motion.div>
         </AnimatePresence>
 
         <motion.div
@@ -500,7 +512,7 @@ function PasswordGate({ onUnlock, onBack }) {
           transition={{ delay: 0.5 }}
         >
           <span className="gate-bracket">[</span>
-          年度履职综述
+          汇报文件汇总
           <span className="gate-bracket">]</span>
         </motion.h1>
         <motion.p
