@@ -2167,6 +2167,36 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [nextSlide, prevSlide, currentPage])
 
+  // Mouse wheel navigation for slides
+  useEffect(() => {
+    if (currentPage !== 'presentation') return
+
+    let isScrolling = false
+    const scrollCooldown = 800 // ms between scroll actions
+
+    const handleWheel = (e) => {
+      if (isScrolling) return
+
+      e.preventDefault()
+      isScrolling = true
+
+      if (e.deltaY > 0) {
+        // Scroll down - next slide
+        nextSlide()
+      } else if (e.deltaY < 0) {
+        // Scroll up - previous slide
+        prevSlide()
+      }
+
+      setTimeout(() => {
+        isScrolling = false
+      }, scrollCooldown)
+    }
+
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    return () => window.removeEventListener('wheel', handleWheel)
+  }, [nextSlide, prevSlide, currentPage])
+
   // Check if already authenticated on mount
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('pxl_authenticated')
