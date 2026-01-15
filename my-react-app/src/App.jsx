@@ -97,7 +97,7 @@ function Homepage({ onEnter, onEnterDefense }) {
             <div className="card-glow-effect purple"></div>
             <div className="card-icon">🎯</div>
             <h2 className="card-title">转正述职答辩</h2>
-            <p className="card-desc">October 2025</p>
+            <p className="card-desc">September 2025</p>
             <div className="card-arrow">
               <span>→</span>
             </div>
@@ -1900,13 +1900,56 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [nextSlide, prevSlide, currentPage])
 
+  // Check if already authenticated on mount
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('pxl_authenticated')
+    if (isAuthenticated === 'true') {
+      setCurrentPage('home')
+    }
+  }, [])
+
   // Show password gate first when entering the site
   if (currentPage === 'password') {
     return (
       <PasswordGate
-        onUnlock={() => setCurrentPage('home')}
+        onUnlock={() => {
+          localStorage.setItem('pxl_authenticated', 'true')
+          setCurrentPage('home')
+        }}
         onBack={null}
       />
+    )
+  }
+
+  // Show defense presentation (iframe)
+  if (currentPage === 'defense') {
+    return (
+      <div className="defense-presentation">
+        <motion.button
+          className="back-button"
+          onClick={() => setCurrentPage('home')}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <span className="back-arrow">←</span>
+          <span>返回首页</span>
+        </motion.button>
+        <iframe
+          src="/react-report/index.html"
+          title="转正述职答辩"
+          style={{
+            width: '100%',
+            height: '100vh',
+            border: 'none',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            zIndex: 1
+          }}
+        />
+      </div>
     )
   }
 
@@ -1915,10 +1958,7 @@ function App() {
     return (
       <Homepage
         onEnter={() => setCurrentPage('presentation')}
-        onEnterDefense={() => {
-          // Open the react-report in a new tab
-          window.open('/react-report/', '_blank')
-        }}
+        onEnterDefense={() => setCurrentPage('defense')}
       />
     )
   }
