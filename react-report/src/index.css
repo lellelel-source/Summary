@@ -1,0 +1,235 @@
+@import "tailwindcss";
+
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom styles ported from original HTML */
+:root {
+  --glow-color: rgb(0, 195, 255);
+}
+html {
+  scroll-snap-type: y mandatory;
+}
+body {
+  background-color: #000000;
+  color: #e5e7eb;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.9) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 160px 120px, rgba(255,255,255,0.8) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 80px 200px, rgba(255,255,255,0.7) 50%, transparent 51%),
+    radial-gradient(1.8px 1.8px at 120px 40px, rgba(255,255,255,0.85) 50%, transparent 51%),
+    radial-gradient(1px 1px at 40px 90px, rgba(255,255,255,0.6) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 200px 180px, rgba(255,255,255,0.75) 50%, transparent 51%);
+  background-size: 250px 250px, 300px 300px, 280px 280px, 320px 320px, 260px 260px, 360px 360px;
+  background-repeat: repeat;
+  background-position: 0 0, 50px 100px, 100px -50px, 0 0, 0 0, 0 0;
+  animation: star-move 120s linear infinite, star-twinkle 10s ease-in-out infinite alternate;
+  will-change: background-position, opacity;
+}
+/* A fixed starry backdrop behind the particle canvas */
+.starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  pointer-events: none;
+  background-color: #000;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.9) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 160px 120px, rgba(255,255,255,0.8) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 80px 200px, rgba(255,255,255,0.7) 50%, transparent 51%),
+    radial-gradient(1.8px 1.8px at 120px 40px, rgba(255,255,255,0.85) 50%, transparent 51%),
+    radial-gradient(1px 1px at 40px 90px, rgba(255,255,255,0.6) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 200px 180px, rgba(255,255,255,0.75) 50%, transparent 51%);
+  background-size: 250px 250px, 300px 300px, 280px 280px, 320px 320px, 260px 260px, 360px 360px;
+  background-repeat: repeat;
+  animation: star-twinkle 10s ease-in-out infinite alternate;
+}
+
+@keyframes star-twinkle {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* Slow drift movement for layered star backgrounds */
+@keyframes star-move {
+  0% {
+    background-position: 0 0, 50px 100px, 100px -50px, 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: -800px -600px, -500px -300px, -300px 400px, 900px 600px, 400px -500px, -300px 300px;
+  }
+}
+#particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.full-page-section {
+  height: 100vh;
+  width: 100%;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Per-section moving star overlay with configurable hue */
+.full-page-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.65;
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.95) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 160px 120px, rgba(255,255,255,0.85) 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 80px 200px, rgba(255,255,255,0.75) 50%, transparent 51%),
+    radial-gradient(1.8px 1.8px at 120px 40px, rgba(255,255,255,0.9) 50%, transparent 51%),
+    radial-gradient(1px 1px at 40px 90px, rgba(255,255,255,0.7) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 200px 180px, rgba(255,255,255,0.8) 50%, transparent 51%);
+  background-size: 250px 250px, 300px 300px, 280px 280px, 320px 320px, 260px 260px, 360px 360px;
+  background-repeat: repeat;
+  background-position: 0 0, 50px 100px, 100px -50px, 0 0, 0 0, 0 0;
+  filter: hue-rotate(var(--star-hue, 0deg));
+  animation: star-move 90s linear infinite, star-twinkle 8s ease-in-out infinite alternate;
+  will-change: background-position, opacity;
+}
+.hero-title {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3), 0 0 20px var(--glow-color);
+}
+.section-title {
+  background: linear-gradient(45deg, #00c3ff, #a78bfa, #00c3ff);
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 5s ease-in-out infinite;
+}
+.glass-card {
+  background: rgba(25, 25, 35, 0.7);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transform-style: preserve-3d;
+}
+.achievement-view,
+.plan-view {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.view-hidden {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+.view-visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* Different pages display different star hues */
+.full-page-section:nth-of-type(1) {
+  --star-hue: 180deg; /* cyan */
+}
+.full-page-section:nth-of-type(2) {
+  --star-hue: 260deg; /* violet */
+}
+.full-page-section:nth-of-type(3) {
+  --star-hue: 200deg; /* blue */
+}
+.full-page-section:nth-of-type(4) {
+  --star-hue: 50deg; /* amber */
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: block;
+  place-items: normal;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}

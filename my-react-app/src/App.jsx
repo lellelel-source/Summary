@@ -5,7 +5,7 @@ import './App.css'
 // ============================================
 // Homepage Component
 // ============================================
-function Homepage({ onEnter }) {
+function Homepage({ onEnter, onEnterDefense }) {
   return (
     <div className="homepage">
       <div className="homepage-particles">
@@ -79,6 +79,25 @@ function Homepage({ onEnter }) {
             <div className="card-icon">📊</div>
             <h2 className="card-title">2025年终述职</h2>
             <p className="card-desc">年度履职综述报告</p>
+            <div className="card-arrow">
+              <span>→</span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="homepage-card secondary-card"
+            onClick={onEnterDefense}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: '0 0 60px rgba(167, 139, 250, 0.4)',
+              borderColor: 'rgba(167, 139, 250, 0.8)'
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="card-glow-effect purple"></div>
+            <div className="card-icon">🎯</div>
+            <h2 className="card-title">转正述职答辩</h2>
+            <p className="card-desc">October 2025</p>
             <div className="card-arrow">
               <span>→</span>
             </div>
@@ -1893,7 +1912,15 @@ function App() {
 
   // After password, show homepage
   if (currentPage === 'home') {
-    return <Homepage onEnter={() => setCurrentPage('presentation')} />
+    return (
+      <Homepage
+        onEnter={() => setCurrentPage('presentation')}
+        onEnterDefense={() => {
+          // Open the react-report in a new tab
+          window.open('/react-report/', '_blank')
+        }}
+      />
+    )
   }
 
   const SlideComponent = slides[currentSlide]

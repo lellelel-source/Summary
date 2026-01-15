@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(npx -y @modelcontextprotocol/create-server --help)",
+      "Bash(ls \"$APPDATA/Claude/\")",
+      "Bash(ls \"$HOME/.config/claude/\")",
+      "Bash(npx @modelcontextprotocol/create-server github)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,1 @@
+- this is a react front-end pages only,no backeend ,no database,no apis

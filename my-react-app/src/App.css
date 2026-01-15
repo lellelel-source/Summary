@@ -3445,6 +3445,26 @@
   transform: translateX(5px);
 }
 
+/* Secondary Card (Purple Theme) */
+.homepage-card.secondary-card {
+  border-color: rgba(167, 139, 250, 0.2);
+}
+
+.homepage-card.secondary-card .card-glow-effect.purple {
+  background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.1), transparent);
+}
+
+.homepage-card.secondary-card .card-arrow {
+  background: rgba(167, 139, 250, 0.1);
+  border-color: rgba(167, 139, 250, 0.3);
+  color: #a78bfa;
+}
+
+.homepage-card.secondary-card:hover .card-arrow {
+  background: #a78bfa;
+  color: var(--bg-dark);
+}
+
 .homepage-footer {
   display: flex;
   align-items: center;
@@ -3508,6 +3528,11 @@
   .homepage-title .title-sub {
     font-size: 1rem;
     letter-spacing: 4px;
+  }
+
+  .homepage-cards {
+    flex-direction: column;
+    gap: 20px;
   }
 
   .homepage-card {
