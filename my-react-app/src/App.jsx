@@ -3,9 +3,257 @@ import { motion, AnimatePresence } from 'framer-motion'
 import './App.css'
 
 // ============================================
+// Cloud Recruitment Data (云招商数据)
+// ============================================
+const cloudRecruitmentData = {
+  summary: {
+    totalDays: 162,
+    dateRange: "2025-07-31 至 2026-01-08",
+    totalRegister: 626,
+    totalForward: 201,
+    totalLogin: 1631,
+    avgRegister: 3.9,
+    avgForward: 1.2,
+    avgLogin: 10.1
+  },
+  monthly: [
+    { month: "2025-07", register: 11, forward: 0, login: 22, label: "7月" },
+    { month: "2025-08", register: 104, forward: 39, login: 273, label: "8月" },
+    { month: "2025-09", register: 18, forward: 12, login: 139, label: "9月" },
+    { month: "2025-10", register: 23, forward: 12, login: 121, label: "10月" },
+    { month: "2025-11", register: 18, forward: 18, login: 123, label: "11月" },
+    { month: "2025-12", register: 415, forward: 99, login: 748, label: "12月" },
+    { month: "2026-01", register: 37, forward: 21, login: 205, label: "1月" }
+  ]
+}
+
+// ============================================
+// Cloud Data Analytics Component
+// ============================================
+function CloudDataAnalytics({ onBack }) {
+  const { summary, monthly } = cloudRecruitmentData
+  const maxLogin = Math.max(...monthly.map(m => m.login))
+  const maxRegister = Math.max(...monthly.map(m => m.register))
+
+  return (
+    <div className="analytics-page">
+      <motion.button
+        className="back-button"
+        onClick={onBack}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <span className="back-arrow">←</span>
+        <span>返回首页</span>
+      </motion.button>
+
+      <div className="analytics-container">
+        <motion.div
+          className="analytics-header"
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="analytics-title">
+            <span className="title-icon">📊</span>
+            云招商数据分析
+          </h1>
+          <p className="analytics-subtitle">{summary.dateRange} · 共 {summary.totalDays} 天</p>
+        </motion.div>
+
+        {/* Summary Cards */}
+        <motion.div
+          className="summary-cards"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
+          <motion.div className="summary-card register" whileHover={{ scale: 1.05, y: -5 }}>
+            <div className="card-icon-wrapper">
+              <span className="card-emoji">👥</span>
+            </div>
+            <div className="card-value">{summary.totalRegister.toLocaleString()}</div>
+            <div className="card-label">累计注册人数</div>
+            <div className="card-avg">日均 {summary.avgRegister} 人</div>
+          </motion.div>
+
+          <motion.div className="summary-card forward" whileHover={{ scale: 1.05, y: -5 }}>
+            <div className="card-icon-wrapper">
+              <span className="card-emoji">🔄</span>
+            </div>
+            <div className="card-value">{summary.totalForward.toLocaleString()}</div>
+            <div className="card-label">累计转发人数</div>
+            <div className="card-avg">日均 {summary.avgForward} 人</div>
+          </motion.div>
+
+          <motion.div className="summary-card login" whileHover={{ scale: 1.05, y: -5 }}>
+            <div className="card-icon-wrapper">
+              <span className="card-emoji">🔑</span>
+            </div>
+            <div className="card-value">{summary.totalLogin.toLocaleString()}</div>
+            <div className="card-label">累计登录人数</div>
+            <div className="card-avg">日均 {summary.avgLogin} 人</div>
+          </motion.div>
+        </motion.div>
+
+        {/* Charts Section */}
+        <motion.div
+          className="charts-section"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+        >
+          {/* Login Trend Chart */}
+          <div className="chart-container">
+            <h3 className="chart-title">
+              <span className="chart-icon">📈</span>
+              月度登录趋势
+            </h3>
+            <div className="bar-chart">
+              {monthly.map((item, index) => (
+                <motion.div
+                  key={item.month}
+                  className="bar-group"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 + index * 0.1 }}
+                >
+                  <div className="bar-wrapper">
+                    <motion.div
+                      className="bar login-bar"
+                      initial={{ height: 0 }}
+                      animate={{ height: `${(item.login / maxLogin) * 100}%` }}
+                      transition={{ delay: 0.7 + index * 0.1, duration: 0.5 }}
+                    >
+                      <span className="bar-value">{item.login}</span>
+                    </motion.div>
+                  </div>
+                  <span className="bar-label">{item.label}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Registration Trend Chart */}
+          <div className="chart-container">
+            <h3 className="chart-title">
+              <span className="chart-icon">📊</span>
+              月度注册趋势
+            </h3>
+            <div className="bar-chart">
+              {monthly.map((item, index) => (
+                <motion.div
+                  key={item.month}
+                  className="bar-group"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 + index * 0.1 }}
+                >
+                  <div className="bar-wrapper">
+                    <motion.div
+                      className="bar register-bar"
+                      initial={{ height: 0 }}
+                      animate={{ height: `${(item.register / maxRegister) * 100}%` }}
+                      transition={{ delay: 0.7 + index * 0.1, duration: 0.5 }}
+                    >
+                      <span className="bar-value">{item.register}</span>
+                    </motion.div>
+                  </div>
+                  <span className="bar-label">{item.label}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Monthly Data Table */}
+        <motion.div
+          className="data-table-container"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+        >
+          <h3 className="table-title">
+            <span className="chart-icon">📋</span>
+            月度数据明细
+          </h3>
+          <div className="data-table">
+            <div className="table-header">
+              <span>月份</span>
+              <span>注册人数</span>
+              <span>转发人数</span>
+              <span>登录人数</span>
+            </div>
+            {monthly.map((item, index) => (
+              <motion.div
+                key={item.month}
+                className="table-row"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.7 + index * 0.05 }}
+                whileHover={{ backgroundColor: 'rgba(79, 209, 197, 0.1)' }}
+              >
+                <span className="month-cell">{item.label}</span>
+                <span className="value-cell register">{item.register}</span>
+                <span className="value-cell forward">{item.forward}</span>
+                <span className="value-cell login">{item.login}</span>
+              </motion.div>
+            ))}
+            <div className="table-footer">
+              <span>合计</span>
+              <span className="total register">{summary.totalRegister}</span>
+              <span className="total forward">{summary.totalForward}</span>
+              <span className="total login">{summary.totalLogin}</span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Key Insights */}
+        <motion.div
+          className="insights-section"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+        >
+          <h3 className="insights-title">
+            <span className="chart-icon">💡</span>
+            关键洞察
+          </h3>
+          <div className="insights-grid">
+            <div className="insight-card">
+              <div className="insight-icon">🚀</div>
+              <div className="insight-content">
+                <div className="insight-highlight">12月数据爆发</div>
+                <p>12月注册415人，占总注册量的 <strong>66.3%</strong>，是全年最高月份</p>
+              </div>
+            </div>
+            <div className="insight-card">
+              <div className="insight-icon">📈</div>
+              <div className="insight-content">
+                <div className="insight-highlight">登录活跃度高</div>
+                <p>登录人数是注册人数的 <strong>{(summary.totalLogin / summary.totalRegister).toFixed(1)}倍</strong>，用户粘性良好</p>
+              </div>
+            </div>
+            <div className="insight-card">
+              <div className="insight-icon">🔄</div>
+              <div className="insight-content">
+                <div className="insight-highlight">转发转化率</div>
+                <p>转发人数占注册人数的 <strong>{((summary.totalForward / summary.totalRegister) * 100).toFixed(1)}%</strong></p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  )
+}
+
+// ============================================
 // Homepage Component
 // ============================================
-function Homepage({ onEnter, onEnterDefense }) {
+function Homepage({ onEnter, onEnterDefense, onEnterAnalytics }) {
   return (
     <div className="homepage">
       <div className="homepage-particles">
@@ -79,6 +327,25 @@ function Homepage({ onEnter, onEnterDefense }) {
             <div className="card-icon">📊</div>
             <h2 className="card-title">2025年终述职</h2>
             <p className="card-desc">年度履职综述报告</p>
+            <div className="card-arrow">
+              <span>→</span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="homepage-card analytics-card"
+            onClick={onEnterAnalytics}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: '0 0 60px rgba(246, 173, 85, 0.4)',
+              borderColor: 'rgba(246, 173, 85, 0.8)'
+            }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="card-glow-effect orange"></div>
+            <div className="card-icon">📈</div>
+            <h2 className="card-title">云招商数据分析</h2>
+            <p className="card-desc">运营数据可视化</p>
             <div className="card-arrow">
               <span>→</span>
             </div>
@@ -1953,12 +2220,18 @@ function App() {
     )
   }
 
+  // Show analytics page
+  if (currentPage === 'analytics') {
+    return <CloudDataAnalytics onBack={() => setCurrentPage('home')} />
+  }
+
   // After password, show homepage
   if (currentPage === 'home') {
     return (
       <Homepage
         onEnter={() => setCurrentPage('presentation')}
         onEnterDefense={() => setCurrentPage('defense')}
+        onEnterAnalytics={() => setCurrentPage('analytics')}
       />
     )
   }
