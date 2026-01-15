@@ -270,7 +270,7 @@ function Homepage({ onEnter, onEnterDefense, onEnterAnalytics }) {
     },
     {
       id: 'analytics',
-      year: '2025',
+      year: '2026',
       title: '云招商数据分析',
       desc: '运营数据可视化',
       icon: '📈',
