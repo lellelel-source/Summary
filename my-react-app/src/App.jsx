@@ -195,7 +195,16 @@ function CloudDataAnalytics({ onBack }) {
                 transition={{ delay: 0.7 + index * 0.05 }}
                 whileHover={{ backgroundColor: 'rgba(79, 209, 197, 0.1)' }}
               >
-                <span className="month-cell">{item.label}</span>
+                <div className="month-cell">
+                  <motion.div
+                    className="month-progress-bar"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${Math.round(((item.register + item.forward + item.login) / Math.max(...monthly.map(m => m.register + m.forward + m.login))) * 100)}%` }}
+                    transition={{ delay: 0.8 + index * 0.05, duration: 0.8 }}
+                  />
+                  <span className="month-label">{item.label}</span>
+                  <span className="month-percent">{Math.round(((item.register + item.forward + item.login) / Math.max(...monthly.map(m => m.register + m.forward + m.login))) * 100)}%</span>
+                </div>
                 <span className="value-cell register">{item.register}</span>
                 <span className="value-cell forward">{item.forward}</span>
                 <span className="value-cell login">{item.login}</span>
