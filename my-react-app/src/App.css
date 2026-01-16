@@ -3764,7 +3764,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  /* justify-content: center; Remove center to align text properly if needed, usually we want content centered but bar starts from left. Let's keep existing alignment or reset */
+  justify-content: space-between;
   height: 100%;
   padding: 0 10px;
   overflow: hidden;
@@ -3783,6 +3783,14 @@
 .cell-value {
   position: relative;
   z-index: 1;
+}
+
+.cell-percent {
+  position: relative;
+  z-index: 1;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-left: auto;
 }
 
 .cell-progress-bar.register-bg {

@@ -207,6 +207,7 @@ function CloudDataAnalytics({ onBack }) {
                     transition={{ delay: 0.8 + index * 0.05, duration: 0.8 }}
                   />
                   <span className="cell-value">{item.register}</span>
+                  <span className="cell-percent">{Math.round((item.register / maxRegister) * 100)}%</span>
                 </div>
 
                 <div className="value-cell forward">
@@ -217,6 +218,7 @@ function CloudDataAnalytics({ onBack }) {
                     transition={{ delay: 0.8 + index * 0.05, duration: 0.8 }}
                   />
                   <span className="cell-value">{item.forward}</span>
+                  <span className="cell-percent">{Math.round((item.forward / maxForward) * 100)}%</span>
                 </div>
 
                 <div className="value-cell login">
@@ -227,6 +229,7 @@ function CloudDataAnalytics({ onBack }) {
                     transition={{ delay: 0.8 + index * 0.05, duration: 0.8 }}
                   />
                   <span className="cell-value">{item.login}</span>
+                  <span className="cell-percent">{Math.round((item.login / maxLogin) * 100)}%</span>
                 </div>
               </motion.div>
             ))}
