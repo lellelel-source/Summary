@@ -3756,46 +3756,45 @@
 }
 
 .month-cell {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 10px;
-  height: 100%;
-  min-height: 30px;
-  /* Ensure height for bar */
-  overflow: hidden;
-  border-radius: 4px;
-}
-
-.month-progress-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  background: linear-gradient(90deg, rgba(79, 209, 197, 0.1), rgba(79, 209, 197, 0.2));
-  border-right: 1px solid rgba(79, 209, 197, 0.5);
-  z-index: 0;
-}
-
-.month-label {
-  position: relative;
-  z-index: 1;
   font-weight: 500;
   color: var(--text-primary);
 }
 
-.month-percent {
+.value-cell {
   position: relative;
-  z-index: 1;
-  font-size: 0.75rem;
-  color: var(--secondary);
-  opacity: 0.8;
-  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; Remove center to align text properly if needed, usually we want content centered but bar starts from left. Let's keep existing alignment or reset */
+  height: 100%;
+  padding: 0 10px;
+  overflow: hidden;
+  border-radius: 4px;
 }
 
-.value-cell {
-  color: var(--text-secondary);
+.cell-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.2;
+}
+
+.cell-value {
+  position: relative;
+  z-index: 1;
+}
+
+.cell-progress-bar.register-bg {
+  background: var(--secondary);
+}
+
+.cell-progress-bar.forward-bg {
+  background: #a78bfa;
+}
+
+.cell-progress-bar.login-bg {
+  background: #f6ad55;
 }
 
 .value-cell.register {

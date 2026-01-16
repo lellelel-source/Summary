@@ -34,6 +34,8 @@ function CloudDataAnalytics({ onBack }) {
   const { summary, monthly } = cloudRecruitmentData
   const maxLogin = Math.max(...monthly.map(m => m.login))
   const maxRegister = Math.max(...monthly.map(m => m.register))
+  const maxForward = Math.max(...monthly.map(m => m.forward))
+
 
   return (
     <div className="analytics-page">
@@ -195,19 +197,37 @@ function CloudDataAnalytics({ onBack }) {
                 transition={{ delay: 0.7 + index * 0.05 }}
                 whileHover={{ backgroundColor: 'rgba(79, 209, 197, 0.1)' }}
               >
-                <div className="month-cell">
+                <span className="month-cell">{item.label}</span>
+
+                <div className="value-cell register">
                   <motion.div
-                    className="month-progress-bar"
+                    className="cell-progress-bar register-bg"
                     initial={{ width: 0 }}
-                    animate={{ width: `${Math.round(((item.register + item.forward + item.login) / Math.max(...monthly.map(m => m.register + m.forward + m.login))) * 100)}%` }}
+                    animate={{ width: `${(item.register / maxRegister) * 100}%` }}
                     transition={{ delay: 0.8 + index * 0.05, duration: 0.8 }}
                   />
-                  <span className="month-label">{item.label}</span>
-                  <span className="month-percent">{Math.round(((item.register + item.forward + item.login) / Math.max(...monthly.map(m => m.register + m.forward + m.login))) * 100)}%</span>
+                  <span className="cell-value">{item.register}</span>
                 </div>
-                <span className="value-cell register">{item.register}</span>
-                <span className="value-cell forward">{item.forward}</span>
-                <span className="value-cell login">{item.login}</span>
+
+                <div className="value-cell forward">
+                  <motion.div
+                    className="cell-progress-bar forward-bg"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(item.forward / maxForward) * 100}%` }}
+                    transition={{ delay: 0.8 + index * 0.05, duration: 0.8 }}
+                  />
+                  <span className="cell-value">{item.forward}</span>
+                </div>
+
+                <div className="value-cell login">
+                  <motion.div
+                    className="cell-progress-bar login-bg"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(item.login / maxLogin) * 100}%` }}
+                    transition={{ delay: 0.8 + index * 0.05, duration: 0.8 }}
+                  />
+                  <span className="cell-value">{item.login}</span>
+                </div>
               </motion.div>
             ))}
             <div className="table-footer">
